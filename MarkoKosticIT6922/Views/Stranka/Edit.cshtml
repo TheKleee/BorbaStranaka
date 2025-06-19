@@ -1,0 +1,23 @@
+﻿@model MarkoKosticIT6922.Models.Stranka
+@{
+	ViewData["Title"] = "Izmena Stranke";
+}
+
+<h2>Izmeni stranku</h2>
+
+<form asp-action="Edit" method="post">
+	<input type="hidden" asp-for="StrankaId" />
+
+	<div class="form-group">
+		<label asp-for="Naziv">Naziv:</label>
+		<input type="text" asp-for="Naziv" class="form-control" placeholder="Unesi naziv stranke"/>
+	</div>
+
+	<div style="padding: 1em 0;">
+		<label asp-for="Opis">Opis:</label>
+		<textarea type="text" asp-for="Opis" placeholder="Opis stranke..." class="form-control"></textarea>
+	</div>
+
+	<button type="submit" class="btn btn-success">Izmeni</button>
+	<a asp-action="Index" class="btn btn-danger">Nazad</a>
+</form>

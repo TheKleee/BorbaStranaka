@@ -1,0 +1,44 @@
+[
+  {
+    "ContainingType": "MarkoKosticIT6922.Controllers.Api.StrankaApiController",
+    "Method": "GetStranke",
+    "RelativePath": "api/StrankaApi",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MarkoKosticIT6922.Controllers.Api.StrankaApiController",
+    "Method": "Create",
+    "RelativePath": "api/StrankaApi",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "stranka",
+        "Type": "MarkoKosticIT6922.Models.Stranka",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MarkoKosticIT6922.Controllers.Api.StrankaApiController",
+    "Method": "Delete",
+    "RelativePath": "api/StrankaApi/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

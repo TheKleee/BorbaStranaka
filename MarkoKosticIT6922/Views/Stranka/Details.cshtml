@@ -1,0 +1,70 @@
+﻿@model MarkoKosticIT6922.Models.Stranka
+@using System.Security.Claims;
+@{
+	ViewData["Title"] = "Detalji Stranke";
+	var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+<h2>@Model.Naziv</h2>
+
+<p>@Model.Opis</p>
+
+@if (User.Identity.IsAuthenticated)
+{
+	<div class="d-flex justify-content-end">
+			<a class="btn btn-success" asp-action="Create" asp-controller="Argument" asp-route-strankaId="@Model.StrankaId">Dodaj novi argument</a>
+	</div>
+}
+
+<table id="argumentiTabela" class="table tabletable-striped">
+	<thead>
+		<tr>
+			<th>Argument</th>
+			<th>Opcije</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var a in Model.Argumenti)
+		{
+			<tr>
+				<td>@a.Tekst</td>
+				<td>
+					@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || userId == a.GlasacId))
+					{
+						<a class="btn btn-primary" asp-action="Edit" asp-controller="Argument" asp-route-id="@a.ArgumentId" >Izmeni</a>
+						<a class="btn btn-danger" asp-action="Delete" asp-controller="Argument" asp-route-id="@a.ArgumentId">Obrisi</a>
+					}
+					else
+					{
+						<p>N/A</p>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-danger">Nazad</a>
+
+@section Scripts {
+		<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+		<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+		<script>
+			$(document).ready(function () {
+				$('#argumentiTabela').DataTable({
+					"pagingType": "simple_numbers",
+					"pageLength": 3,
+					"lengthMenu": [[3, 5, 10], [3, 5, 10]],
+					"language": {
+						"search": "Pretraga:",
+						"lengthMenu": "Prikazi _MENU_ unosa po strani",
+						"info": "Stranica _PAGE_ od _PAGES_",
+						"paginate": {
+							"previous": "<--	",
+							"next": "	-->"
+						}
+					}
+				});
+			});
+		</script>
+}

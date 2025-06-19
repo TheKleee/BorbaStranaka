@@ -1,0 +1,21 @@
+﻿@model MarkoKosticIT6922.Models.Stranka
+@{
+	ViewData["Title"] = "Nova Stranka";
+}
+
+<h2>Dodaj novu stranku</h2>
+
+<form asp-action="Create" method="post">
+	<div class="form-group">
+		<label asp-for="Naziv">Naziv:</label>
+		<input type="text" asp-for="Naziv" class="form-control" placeholder="Unesi naziv stranke"/>
+	</div>
+
+	<div style="padding: 1em 0;">
+		<label asp-for="Opis">Opis:</label>
+		<textarea type="text" asp-for="Opis" placeholder="Opis stranke..." class="form-control"></textarea>
+	</div>
+
+	<button type="submit" class="btn btn-success">Dodaj</button>
+	<a asp-action="Index" class="btn btn-danger">Nazad</a>
+</form>

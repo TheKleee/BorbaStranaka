@@ -1,0 +1,70 @@
+﻿@model IEnumerable<MarkoKosticIT6922.Models.Stranka>
+@{
+	ViewData["Title"] = "Lista Stranaka";
+}
+
+<h2>Sve stranke</h2>
+
+@if (User.Identity.IsAuthenticated)
+{
+	<div class="d-flex justify-content-center">
+		<a class="btn btn-danger" style="width: 200px; height: 80px; font-size: 20px; font-weight: bold">Zapocni borbu stranaka!</a>
+	</div>
+}
+
+@if (User.IsInRole("Admin"))
+{
+	<div class="d-flex justify-content-end">
+		<a asp-action="Create" class="btn btn-success">Dodaj novu stranku</a>
+	</div>
+}
+
+<table id="strankeTabela" class="table tabletable-striped">
+	<thead>
+		<tr>
+			<th>Naziv</th>
+			<th>Opis</th>
+			<th>Opcije</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var s in Model)
+		{
+			<tr>
+				<td>@s.Naziv</td>
+				<td>@s.Opis</td>
+				<td>
+					@if (User.IsInRole("Admin"))
+					{
+						<a class="btn btn-primary" asp-action="Edit" asp-route-id="@s.StrankaId">Izmeni</a>
+						<a class="btn btn-danger" asp-action="Delete" asp-route-id="@s.StrankaId">Obrisi</a>
+					} 
+					<a class="btn btn-success" asp-action="Details" asp-route-id="@s.StrankaId">Detalji</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@section Scripts {
+		<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+		<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+		<script>
+			$(document).ready(function () {
+				$('#strankeTabela').DataTable({
+					"pagingType": "simple_numbers",
+					"pageLength": 3,
+					"lengthMenu": [[3, 5, 10], [3, 5, 10]],
+					"language": {
+						"search": "Pretraga:",
+						"lengthMenu": "Prikazi _MENU_ unosa po strani",
+						"info": "Stranica _PAGE_ od _PAGES_",
+						"paginate": {
+							"previous": "<--	",
+							"next": "	-->"
+						}
+					}
+				});
+			});
+		</script>
+}

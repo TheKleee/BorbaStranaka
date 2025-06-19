@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Upravljanje Strankama (REST)";
+}
+
+<h2>Upravljanje Strankama (REST API)</h2>
+
+<div class="mb-4">
+    <h4>Dodaj novu stranku</h4>
+    <input id="naziv" class="form-control mb-2" placeholder="Naziv" />
+    <input id="opis" class="form-control mb-2" placeholder="Opis" />
+    <button class="btn btn-success" onclick="dodajStranku()">Dodaj</button>
+</div>
+
+<hr />
+
+<h4>Lista svih stranaka</h4>
+<table class="table table-bordered" id="strankaTabela">
+    <thead>
+        <tr>
+            <th>Naziv</th>
+            <th>Opis</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <script>
+        function ucitajStranke() {
+            $.get("/api/StrankaApi", function (data) {
+                let html = "";
+                data.forEach(s => {
+                    html += `
+                        <tr>
+                            <td>${s.naziv}</td>
+                            <td>${s.opis}</td>
+                            <td>
+                                <button class="btn btn-danger" onclick="obrisiStranku(${s.strankaId})">Obrisi</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                $("#strankaTabela tbody").html(html);
+            });
+        }
+
+        function dodajStranku() {
+            const stranka = {
+                naziv: $("#naziv").val(),
+                opis: $("#opis").val()
+            };
+
+            $.ajax({
+                url: "/api/StrankaApi",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(stranka),
+                success: function () {
+                    alert("Stranka uspešno dodata!");
+                    ucitajStranke();
+                    $("#naziv").val("");
+                    $("#opis").val("");
+                },
+                error: function () {
+                    alert("Greska prilikom dodavanja.");
+                }
+            });
+        }
+
+        function obrisiStranku(id) {
+            if (!confirm("Da li ste sigurni?")) return;
+
+            $.ajax({
+                url: "/api/StrankaApi/" + id,
+                type: "DELETE",
+                success: function () {
+                    alert("Stranka obrisana.");
+                    ucitajStranke();
+                },
+                error: function () {
+                    alert("Greska pri brisanju.");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            ucitajStranke();
+        });
+    </script>
+}

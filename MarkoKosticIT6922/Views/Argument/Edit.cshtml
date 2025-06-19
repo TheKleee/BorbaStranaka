@@ -1,0 +1,19 @@
+﻿@model MarkoKosticIT6922.Models.Argument
+@{
+	ViewData["Title"] = "Izmena Argumenta";
+}
+
+<h2>Izmeni argument za stranku: <em>@ViewBag.StrankaNaziv</em></h2>
+
+<form asp-action="Edit" method="post">
+	<input type="hidden" asp-for="ArgumentId" />
+	<input type="hidden" asp-for="StrankaId" />
+
+	<div style="padding: 1em 0;">
+		<label asp-for="Tekst">Opis:</label>
+		<textarea type="text" asp-for="Tekst" placeholder="Tekst argumenta..." class="form-control"></textarea>
+	</div>
+
+	<button type="submit" class="btn btn-success">Izmeni</button>
+	<a asp-controller="Stranka" asp-action="Details" asp-route-id="@Model.StrankaId" class="btn btn-danger">Nazad</a>
+</form>

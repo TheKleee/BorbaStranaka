@@ -1,0 +1,19 @@
+﻿@model MarkoKosticIT6922.Models.Argument
+@{
+	ViewData["Title"] = "Novi Argument";
+}
+
+<h2>Dodaj novi argument za stranku: <em>@ViewBag.StrankaNaziv</em></h2>
+
+<form asp-action="Create" method="post">
+
+	<input type="hidden" asp-for="StrankaId" />
+
+	<div class="form-group" style="padding: 1em 0;">
+		<label asp-for="Tekst">Tekst:</label>
+		<input type="text" asp-for="Tekst" class="form-control" placeholder="Unesi argument za stranku"/>
+	</div>
+
+	<button type="submit" class="btn btn-success">Dodaj</button>
+	<a asp-controller="Stranka" asp-action="Details" asp-route-id="@Model.StrankaId" class="btn btn-danger">Nazad</a>
+</form>

@@ -1,0 +1,105 @@
+﻿@model MarkoKosticIT6922.Models.ViewModels.ArgumentFilterViewModel
+@{
+	ViewData["Title"] = "Skup Argumenata";
+}
+
+<div class="container my-4">
+
+	<form method="get" asp-action="Index" class="row mb-3">
+		<div class="col-md-4">
+			<label class="form-label">Filter:</label>
+			<select name="id" class="form-select" asp-items="Model.StrankaSelektList" onchange="this.form.submit()">
+				<option value="">--- Sve Stranke ---</option>
+			</select>
+		</div>
+		<div class="col-md-4">
+			<label class="form-label">Pretraga:</label>
+			<input type="text" name="pretraga" value="@Model.Pretraga" placeholder="Pretrazi..." class="form-control" />
+		</div>
+
+		<div class="col-md-2">
+			<label class="form-label">Sortiraj:</label>
+			<select name="sortiranje" class="form-select">
+				<option value="" selected="@(string.IsNullOrEmpty(Model.Sortiranje))">[A-Z]</option>
+				<option value="title_desc" selected="@(Model.Sortiranje == "title_desc")">[Z-A]</option>
+			</select>
+
+		</div>
+
+
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-primary w-100">Pretrazi</button>
+		</div>
+
+
+
+	</form>
+
+	<h2>Svi Argumenti</h2>
+
+	<table class="table tabletable-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Opcije</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var a in Model.Argumenti.Items)
+			{
+				<tr>
+					<td>@a.Tekst</td>
+					<td>
+						@if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || ViewBag.GlasacId == a.GlasacId))
+						{
+							<a class="btn btn-primary" asp-action="Edit" asp-route-id="@a.ArgumentId" >Izmeni</a>
+							<a class="btn btn-danger" asp-action="Delete" asp-route-id="@a.ArgumentId">Obrisi</a>
+						}
+						else
+						{
+							<p>N/A</p>
+						}
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<div class="pagination">
+		@if(Model.Argumenti.TotalPages > 1)
+		{
+			<nav>
+				<ul class="pagination">
+					@for(int i = 1; i <= Model.Argumenti.TotalPages; i++)
+					{
+						var parametri = new
+						{
+							id = Model.SelectedStrankaId,
+							pretraga = Model.Pretraga,
+							sortiranje = Model.Sortiranje,
+							page = i
+						};
+
+						if(i == Model.Argumenti.PageNumber)
+						{
+							<li class="page-item active">
+								<span class="page-link">@i</span>
+							</li>
+						} else {
+							<li class="page-item">
+								<a class="page-link" asp-action="Index"
+									asp-route-id="@parametri.id"
+									asp-route-pretraga="@parametri.pretraga"
+									asp-route-sortiranje="@parametri.sortiranje" 
+									asp-route-page="@parametri.page" >
+									@i
+								</a>
+							</li>
+						}
+					}
+				</ul>
+			</nav>
+		}
+	</div>
+
+</div>
