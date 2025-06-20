@@ -49,7 +49,7 @@ namespace MarkoKosticIT6922.Data
                     new Argument { Tekst = "Zabranimo skole, svi cemo imati misljenje!", StrankaId = stranke[0].StrankaId},
                     new Argument { Tekst = "Vodja je uvek u pravu!", StrankaId = stranke[1].StrankaId},
                     new Argument { Tekst = "Zaposlenje? Zasto kad mozemo svi biti kod kuce!", StrankaId = stranke[2].StrankaId },
-                    new Argument { Tekst = "Ako su svi lopovi, barem znamo na emu smo.", StrankaId = stranke[0].StrankaId },
+                    new Argument { Tekst = "Ako su svi lopovi, barem znamo na cemu smo.", StrankaId = stranke[0].StrankaId },
                     new Argument { Tekst = "Uklanjanjem konkurencije, lopovluk je pod kontrolom.", StrankaId = stranke[0].StrankaId },
                     new Argument { Tekst = "Stabilnost kroz nepromenjivost – ne moze biti gore!", StrankaId = stranke[0].StrankaId },
                     new Argument { Tekst = "Brze se odlucuje kada odlucuje samo jedan covek.", StrankaId = stranke[1].StrankaId },

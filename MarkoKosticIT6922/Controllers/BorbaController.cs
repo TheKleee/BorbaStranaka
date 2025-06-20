@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Security.Claims;
 
 namespace MarkoKosticIT6922.Controllers
 {
@@ -68,6 +69,17 @@ namespace MarkoKosticIT6922.Controllers
             var gubitnik = await _context.Stranke.Where(s => s.StrankaId == gubitnikId).FirstAsync();
 
             _context.Borbe.Add(borba);
+            await _context.SaveChangesAsync();
+
+            var glasac = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var glasanje = new Glasanje
+            {
+                GlasacId = glasac,
+                BorbaId = borba.BorbaId,
+            };
+
+            _context.Glasanja.Add(glasanje);
             await _context.SaveChangesAsync();
 
             TempData["Poruka"] = $"Pobednik: {pobednik.Naziv}\nGubitnik: {gubitnik.Naziv}";
