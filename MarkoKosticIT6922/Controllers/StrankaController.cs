@@ -99,7 +99,7 @@ namespace MarkoKosticIT6922.Controllers
             return View(s);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin"), HttpGet]
         public IActionResult Manage()
         {
             return View();

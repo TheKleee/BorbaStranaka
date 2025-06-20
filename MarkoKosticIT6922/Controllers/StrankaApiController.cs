@@ -19,10 +19,20 @@ namespace MarkoKosticIT6922.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStranke()
+        public async Task<ActionResult<List<Stranka>>> DohvatiSve()
         {
             var stranke = await _context.Stranke.ToListAsync();
             return Ok(stranke);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Stranka>> DohvatiJednu(int id)
+        {
+            var jednaStranka = await _context.Stranke.FirstOrDefaultAsync(s => s.StrankaId == id);
+
+            if (jednaStranka == null) return NotFound();
+
+            return Ok(jednaStranka);
         }
 
         [HttpPost]
@@ -30,20 +40,33 @@ namespace MarkoKosticIT6922.Controllers.Api
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            _context.Stranke.Add(stranka);
+            if(string.IsNullOrEmpty(stranka.Naziv))
+            {
+                ModelState.AddModelError("Naziv", "Naziv stranke je obavezan");
+                return BadRequest(ModelState);
+            }
+
+            var nova = new Stranka
+            {
+                Naziv = stranka.Naziv,
+                Opis = stranka.Opis
+            };
+
+            _context.Stranke.Add(nova);
             await _context.SaveChangesAsync();
-            return Ok(stranka);
+            return CreatedAtAction(nameof(DohvatiJednu), new { id = nova.StrankaId }, nova);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var stranka = await _context.Stranke.FindAsync(id);
+            var stranka = await _context.Stranke.FirstOrDefaultAsync(s => s.StrankaId == id);
+
             if (stranka == null) return NotFound();
 
             _context.Stranke.Remove(stranka);
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Stranka obrisana." });
+            return NoContent();
         }
     }
 }

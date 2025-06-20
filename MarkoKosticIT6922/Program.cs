@@ -2,6 +2,7 @@ using MarkoKosticIT6922.Data;
 using MarkoKosticIT6922.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,12 @@ builder.Services.AddIdentity<Glasac, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
+builder.Services.AddControllers()
+    .AddJsonOptions(opts => {
+        opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
 builder.Services.AddControllersWithViews();
+
 
 var app = builder.Build();
 

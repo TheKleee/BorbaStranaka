@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DAwNETsoAjU=",
+  "dgSpecHash": "gxdEJ/7Cc48=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kostic\\Desktop\\Raf\\RVAS\\Ispit\\MarkoKosticIT6922\\MarkoKosticIT6922.csproj",
+  "projectFilePath": "C:\\Users\\Kostic\\Desktop\\Raf\\RVAS\\Ispit\\BorbaStranaka\\MarkoKosticIT6922\\MarkoKosticIT6922.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kostic\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Kostic\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

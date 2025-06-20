@@ -6,9 +6,16 @@
 
 <div class="mb-4">
     <h4>Dodaj novu stranku</h4>
-    <input id="naziv" class="form-control mb-2" placeholder="Naziv" />
-    <input id="opis" class="form-control mb-2" placeholder="Opis" />
-    <button class="btn btn-success" onclick="dodajStranku()">Dodaj</button>
+   <form id="formaDodajStranku">
+        <label>Naziv: </label><br />
+        <input type="text" id="naziv" class="form-control mb-2" placeholder="Naziv" />
+        
+        <label>Opis: </label><br />
+        <textarea type="text" id="opis" class="form-control mb-2" placeholder="Opis"></textarea>
+
+        <button class="btn btn-success" type="submit">Dodaj</button>
+   </form>
+   <div id="greskaDodaj" style="color:red; margin-top:5px"></div>
 </div>
 
 <hr />
@@ -17,79 +24,109 @@
 <table class="table table-bordered" id="strankaTabela">
     <thead>
         <tr>
+            <th>StrankaId</th>
             <th>Naziv</th>
             <th>Opis</th>
             <th>Akcija</th>
         </tr>
     </thead>
     <tbody>
-
     </tbody>
 </table>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function ucitajStranke() {
-            $.get("/api/StrankaApi", function (data) {
-                let html = "";
-                data.forEach(s => {
-                    html += `
-                        <tr>
-                            <td>${s.naziv}</td>
-                            <td>${s.opis}</td>
-                            <td>
-                                <button class="btn btn-danger" onclick="obrisiStranku(${s.strankaId})">Obrisi</button>
-                            </td>
-                        </tr>
-                    `;
+        $(function (){
+            function ucitajSve() {
+                $.ajax({
+                    url: '/api/StrankaApi',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#strankaTabela tbody').empty();
+
+                        data.forEach(function (stranka) {
+                            var red = '<tr data-id="' + stranka.strankaId + '">' +
+                                '<td>' + stranka.strankaId + '</td>' + 
+                                '<td>' + stranka.naziv + '</td>' + 
+                                '<td>' + stranka.opis + '</td>' + 
+                                '<td><button class="btn btn-danger btn-brisi">Obrisi</td>' +
+                                '<tr>';
+                            $('#strankaTabela tbody').append(red);
+                        });
+                    },
+                    error: function (xhr) {
+                        console.error('Greska pri GET /api/Stranka:', xhr.responseText);
+                    }
                 });
-                $("#strankaTabela tbody").html(html);
-            });
-        }
+            }
 
-        function dodajStranku() {
-            const stranka = {
-                naziv: $("#naziv").val(),
-                opis: $("#opis").val()
-            };
+            ucitajSve();
 
-            $.ajax({
-                url: "/api/StrankaApi",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(stranka),
-                success: function () {
-                    alert("Stranka uspešno dodata!");
-                    ucitajStranke();
-                    $("#naziv").val("");
-                    $("#opis").val("");
-                },
-                error: function () {
-                    alert("Greska prilikom dodavanja.");
+            $('#formaDodajStranku').submit(function (e) {
+                e.preventDefault();
+                var naziv = $('#naziv').val().trim();
+                if (!naziv) {
+                    $('#greskaDodaj').text('Naziv stranke je obavezan.');
+                    return;
                 }
+
+                var opis = $('#opis').val();
+
+                var novo = {
+                    naziv: naziv,
+                    opis: opis
+                };
+
+                $.ajax({
+                    url: '/api/StrankaApi',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(novo),
+                    success: function (vracena) {
+                        ucitajSve();
+                        $('#naziv').val('');
+                        $('#opis').val('');
+                        $('#greskaDodaj').text('');
+                    },
+                    error: function (xhr) {
+                        var msg = xhr.responseText;
+                        try {
+                            var obj = JSON.parse(xhr.responseText);
+                            if (obj.errors) {
+                                var msgs = [];
+                                for (var k in obj.errors) {
+                                    msgs.push(obj.errors[k].join(', '));
+                                }
+                                msg = msgs.join(' | ');
+                            }
+                        } catch { }
+                        $('#greskaDodaj').text('Greska: ' + msg);
+                    }
+                });
             });
-        }
 
-        function obrisiStranku(id) {
-            if (!confirm("Da li ste sigurni?")) return;
+            $('#strankaTabela').on('click', '.btn-brisi', function () {
+                var red = $(this).closest('tr');
+                var id = red.data('id');
 
-            $.ajax({
-                url: "/api/StrankaApi/" + id,
-                type: "DELETE",
-                success: function () {
-                    alert("Stranka obrisana.");
-                    ucitajStranke();
-                },
-                error: function () {
-                    alert("Greska pri brisanju.");
+                if (!confirm('Da li ste sigurni da zelite da obrisete stranku?')){
+                    return;
                 }
-            });
-        }
 
-        $(document).ready(function () {
-            ucitajStranke();
+                $.ajax({
+                    url: '/api/StrankaApi/' + id,
+                    method: 'DELETE',
+                    success: function () {
+                        ucitajSve();
+                    },
+                    error: function (xhr) {
+                        var poruka = xhr.responseText || 'Doslo je do greske.';
+                        alert('Greska pri brisanju: ' + poruka);
+                    }
+                });
+            });
         });
     </script>
 }
