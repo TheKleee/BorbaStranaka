@@ -1,0 +1,38 @@
+﻿@model MarkoKosticIT6922.Models.ViewModels.BorbaViewModel
+@{
+    ViewData["Title"] = "Borba Stranaka";
+}
+
+<h2>Borba Stranaka!</h2>
+
+<form asp-action="Glasaj" method="post">
+    <table class="table tabletable-striped">
+        <thead>
+            <tr>
+                <th>Argumenti 1. stranke</th>
+                <th>Izaberi</th>
+                <th>Argumenti 2. stranke</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < 3; i++)
+            {
+                <tr>
+                    <td>@Model.ArgumentiStranka1[i].Tekst</td>
+                    <td class="text-center">
+                        <input type="radio" name="Glas[@i]" value="1" required /> 
+                        <input type="radio" name="Glas[@i]" value="2" />
+                        <input type="hidden" name="Arg1[@i]" value="@Model.ArgumentiStranka1[i].ArgumentId" />
+                        <input type="hidden" name="Arg2[@i]" value="@Model.ArgumentiStranka2[i].ArgumentId" />
+                    </td>
+                    <td>@Model.ArgumentiStranka2[i].Tekst</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <input type="hidden" name="Stranka1Id" value="@Model.Stranka1Id" />
+    <input type="hidden" name="Stranka2Id" value="@Model.Stranka2Id" />
+    <button type="submit" class="btn btn-success">Glasaj!</button>
+    <a class="btn btn-danger" asp-controller="Stranka" asp-action="Index">Odustani</a>
+</form>

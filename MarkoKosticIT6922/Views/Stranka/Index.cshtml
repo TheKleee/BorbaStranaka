@@ -8,7 +8,8 @@
 @if (User.Identity.IsAuthenticated)
 {
 	<div class="d-flex justify-content-center">
-		<a class="btn btn-danger" style="width: 200px; height: 80px; font-size: 20px; font-weight: bold">Zapocni borbu stranaka!</a>
+		<a class="btn btn-danger" style="width: 200px; height: 80px; font-size: 20px; font-weight: bold"
+			asp-controller="Borba" asp-action="Index">Zapocni borbu stranaka!</a>
 	</div>
 }
 
